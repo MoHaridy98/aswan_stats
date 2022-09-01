@@ -1,0 +1,368 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="human_force.master.cs" Inherits="aswan_stats.human_force.human_force" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../images/haya-logo.jpg">
+    <title>الدليل الحصائي - القوى العاملة</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../css/rtl/bootstrap.min.css" rel="stylesheet">
+    <!-- not use this in ltr -->
+    <link href="../css/rtl/bootstrap.rtl.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="../css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link href="../css/plugins/dataTables.bootstrap.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/rtl/sb-admin-2.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../css/font-awesome/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <style>
+        .form-group {
+            margin-left: 5px !important;
+        }
+    </style>
+    <style>
+        .image-logo {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100px;
+            z-index: 10;
+        }
+
+            .image-logo img {
+                width: 100%;
+                border-radius: 10px;
+                animation: glow 1s infinite alternate;
+                /* box-shadow: 0 0 50px -10px #ee7326; 
+            box-shadow: rgb(0 0 0 / 19%) 0px 10px 20px, rgb(0 0 0 / 23%) 0px 6px 6px;*/
+            }
+
+        @keyframes glow {
+            from {
+                box-shadow: rgba(39, 156, 150, 0.5) 0px 12px 28px 0px, rgba(39, 156, 150, 0.4) 0px 2px 4px 0px inset;
+            }
+
+            to {
+                box-shadow: rgba(238, 115, 38, 0.5) 0px 12px 28px 0px, rgba(238, 115, 38, 0.4) 0px 2px 4px 0px inset;
+            }
+        }
+
+        .window {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            padding: 50px 0;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100%;
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+            .window .title {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .window .profile {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                display: inline-block;
+                box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary);
+            }
+
+            .window h1 {
+                display: inline-block;
+                margin-left: 10px;
+            }
+
+        /* The Close Button */
+
+        .window-close {
+            color: #279c96;
+            float: right;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+            .window-close:hover,
+            .window-close:focus {
+                color: #ee7326;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+        /* window Content */
+        .window-content {
+            position: relative;
+            background-color: #f8f8f8f0;
+            margin: auto;
+            padding: 10px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 15px;
+        }
+
+        #footer {
+            clear: both;
+        }
+
+        @media screen and (max-width: 768px) {
+            .window .title {
+                flex-direction: column;
+                text-align: center;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+            }
+
+            .window h1 {
+                margin-left: 0;
+            }
+
+            .window p {
+                text-align: justify;
+            }
+        }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <nav class='navbar navbar-default navbar-static-top' role='navigation' style='margin-bottom: 0'>
+        <!-- Navigation -->
+        <div class='navbar-header'>
+            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand' style='font-size: x-large; display: flex;' href='../index.php'>
+                <img style='width: 40px; height: 40px; margin: -10px 0 0 10px; border-radius: 5px;' src='../images/logo.png'>الدليل الاحصائي</a>
+        </div>
+        <!-- navbar-header -->
+        <ul class='nav navbar-top-links navbar-left'>
+            <!-- /.dropdown -->
+            <img style='width: 35px; height: 45px; margin: 0 35px 0 0; border-radius: 5px;' src='../images/swan.png'>
+            <li class='dropdown'>
+                <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                    <i class='fa fa-user fa-fw'></i><i class='fa fa-caret-down'></i>
+                </a>
+                <ul class='dropdown-menu dropdown-user'>
+                    <li>اهلا , </li>
+                    <li><a href='#' onclick='setting()'><i class='fa fa-gear fa-fw'></i>الاعدادات</a>
+                    </li>
+                    <li class='divider'></li>
+                    <li><a href='../logout.php'><i class='fa fa-sign-out fa-fw'></i>تسجيل الخروج</a>
+                    </li>
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+        <!-- /.navbar-static-side -->
+        <!--POP_UP WINDOW CLICKED THE a-->
+        <div id='popup' class='window'>
+            <div class='window-content'>
+                <span class='window-close'>&times;</span>
+                <div id='popup-content'>
+                </div>
+            </div>
+        </div>
+        <div class='navbar-default sidebar' role='navigation'>
+            <div class='sidebar-nav navbar-collapse'>
+                <ul class='nav' id='side-menu'>
+                    <li>
+                        <a href='index.aspx'><i class='fa fa-dashboard fa-fw'></i>المؤشرات</a>
+                    </li>
+                    <li>
+                        <a href='facility.aspx'><i class='fa fa-building fa-fw'></i>المنشآت</a>
+                    </li>
+                    <li>
+                        <a href='manpower.aspx'><i class='fa fa-users fa-fw'></i>طاقة المحافظة البشرية</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#office_activity" aria-expanded="false" aria-controls="ui-basic">
+                            <i class='fa fa-briefcase fa-fw'></i>
+                            <span class="menu-title">نشاط المكتب</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <div class="collapse" id="office_activity">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="registered.aspx"><i class='fa fa-users'></i>المسجلين</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="appointed.aspx"><i class='fa fa-users'></i>المعينين</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="fallen.aspx"><i class='fa fa-users'></i>ساقطي القيد</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href='training-center.aspx'><i class='fa fa-building fa-fw'></i>مراكز التدريب</a>
+                    </li>
+                    <li>
+                        <a href='syndicate.aspx'><i class='fa fa-users fa-fw'></i>النقابات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#report" aria-expanded="false" aria-controls="ui-basic">
+                            <i class='fa fa-table fa-fw'></i>
+                            <span class="menu-title">التقارير</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <div class="collapse" id="report">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class='fa fa-building'></i> المنشآت</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class='fa fa-users'></i> الخرجين والبطالة</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class='fa fa-briefcase'></i> نشاط المكاتب</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class='fa fa-users'></i> المسجلين بالمكاتب</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class='fa fa-users'></i> المعينين بالمكاتب</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class='fa fa-building'></i> مراكز التدريب</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#"><i class='fa fa-users'></i> النقابات</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.sidebar-collapse -->
+        </div>
+    </nav>
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        </asp:ContentPlaceHolder>
+    </div>
+    <footer id='footer' class='text-center' style='background-color: #279c96; color: white;'>
+        <div class='text-center p-3' style='background-color: rgba(0, 0, 0, 0.2);'>
+            <h4 style='padding: 10px; margin: 0'>© 2021 جميع الحقوق محفوظة : مركز نظم المعلومات والتحول الرقمي.</h4>
+        </div>
+    </footer>
+    <!-- jQuery Version 1.11.0 -->
+    <script src="../js/jquery-1.11.0.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../js/metisMenu/metisMenu.min.js"></script>
+    <!-- DataTables JavaScript -->
+    <script src="../js/jquery/jquery.dataTables.min.js"></script>
+    <script src="../js/bootstrap/dataTables.bootstrap.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/sb-admin-2.js"></script>
+    <script>
+        var modal = document.getElementById('popup');
+        var change = document.getElementById('popup-content');
+        var span = document.getElementsByClassName('window-close')[0];
+        function setting() {
+            modal.style.display = 'block';
+            change.innerHTML = `<div class='row'>
+                                    <div class='col-lg-12'>
+                                        <div class='panel panel-default'>
+                                            <div class='panel-heading'>
+                                                تعديل المستخدم
+                                            </div>
+                                        <!-- /.panel-heading -->
+                                        <div class='panel-body'>
+                                            <form class='form text-right' action='' method='post'>
+                                                <h3 class='text-center text-info'>تعديل البيانات</h3>                                        
+                                                <div class='form-group'>
+                                                    <label for='user' class='text-info'>اسم المستخدم:</label><br>
+                                                    <input disabled type='text' name='user' value='' minlength='4' maxlength='32' id='user' class='form-control'>
+                                                </div>
+                                                <div class='form-group' style = 'margin-bottom: 30px'>
+                                                    <label for='password' class='text-info'>كلمة السر القديمة:</label><br>
+                                                    <input type='password' name='oldPassword' minlength='4' maxlength='20' id='oldPassword' class='form-control' required>
+                                                    <input type='checkbox' id='checkbox' onclick='show()'>
+                                                    <label for='checkbox'>عرض الرقم السري</label>
+                                                </div>
+                                                <div class='form-group' style = 'margin-bottom: 30px'>
+                                                    <label for='password' class='text-info'>كلمة السر الجديدة:</label><br>
+                                                    <input type='password' name='newPassword' minlength='4' maxlength='20' id='newPassword' class='form-control' require>
+                                                    <input type='checkbox' id='checkbox1' onclick='show2()'>
+                                                    <label for='checkbox1'>عرض الرقم السري</label>
+                                                </div>
+                                                <div class='form-group text-right'>
+                                                    <input type='submit' name='edit' onClick='editConfirmation(event)' class='btn btn-primary' value='تغير كلمة السر'>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>`;
+        }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = 'none';
+            window.onscroll = function () { };
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+                window.onscroll = function () { };
+            }
+        }
+        function editConfirmation(event) {
+            var c = confirm('هل انت متأكد من البيانات!؟');
+            if (!c) { event.preventDefault(); }
+        }
+        function show() {
+            var x = document.getElementById('oldPassword');
+            if (x.type === 'password') {
+                x.type = 'text';
+            } else {
+                x.type = 'password';
+            }
+        }
+        function show2() {
+            var x = document.getElementById('newPassword');
+            if (x.type === 'password') {
+                x.type = 'text';
+            } else {
+                x.type = 'password';
+            }
+        }
+        $('#zero_config').DataTable();
+
+        function pdfReport() {
+            var printContents = document.getElementById('pdf').innerHTML;
+            //document.getElementById('centerlogo').style.display = 'flex';
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            //location.reload();
+        }
+    </script>
+</body>
+</html>
